@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Valentine?</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="page">
+    <section class="card" aria-label="Valentine Proposal Card">
+      <div class="heart" aria-hidden="true">❤</div>
+
+      <h1>Hi JJ, will you be my valentines?</h1>
+      <p class="sub">I promise snacks, good vibes, and lots of love 💕</p>
+
+      <div class="buttons" id="btnArea">
+        <button class="btn yes" id="yesBtn" type="button">Yes 💖</button>
+        <button class="btn no" id="noBtn" type="button">No 🙃</button>
+      </div>
+
+      <p class="message" id="message" aria-live="polite"></p>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
+``
