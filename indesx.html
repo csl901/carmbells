@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Valentine?</title>
+  <style>
+    :root{
+      --bg1:#ffdde1;
+      --bg2:#ee9ca7;
+      --card:#ffffffcc;
+      --text:#2b2b2b;
+      --yes:#ff4d6d;
+      --yesHover:#ff3358;
+      --shadow: 0 20px 60px rgba(0,0,0,.15);
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background: radial-gradient(circle at top, var(--bg1), var(--bg2));
+      min-height:100vh;
+    }
+
+    .page{
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      padding:24px;
+    }
+
+    .card{
+      width:min(560px, 92vw);
+      background:var(--card);
+      backdrop-filter: blur(10px);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      padding:32px 26px;
+      text-align:center;
+      position:relative;
+      overflow:hidden;
+      border: 1px solid rgba(255,255,255,.55);
+    }
+
+    .heart{
+      font-size:54px;
+      animation: float 2.2s ease-in-out infinite;
+      filter: drop-shadow(0 6px 18px rgba(255,0,80,.25));
+      margin-bottom:10px;
+    }
+
+    h1{
+      margin: 8px 0 10px;
+      font-size: clamp(22px, 4vw, 34px);
+      letter-spacing: .2px;
+    }
+
+    .sub{
+      margin: 0 0 22px;
+      font-size: 1rem;
+      opacity: .85;
+    }
+
+    .buttons{
+      margin-top: 10px;
+      position: relative;   /* keeps "No" within this area */
+      height: 140px;        /* space for the no button to run */
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:16px;
+    }
+
+    .btn{
+      border:0;
+      padding: 14px 22px;
+      border-radius: 999px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor:pointer;
+      transition: transform .15s ease, background .15s ease, box-shadow .15s ease;
+      user-select:none;
+      box-shadow: 0 10px 25px rgba(0,0,0,.12);
+    }
+
+    .btn:active{
+      transform: scale(.98);
+    }
+
+    .btn.yes{
+      background: var(--yes);
+      color: white;
+    }
+    .btn.yes:hover{
+      background: var(--yesHover);
+      transform: translateY(-1px);
+    }
+
+    .btn.no{
+      background: #f1f1f1;
+      color: #222;
+      position: absolute; /* allow it to move anywhere inside .buttons */
+      right: 20%;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .message{
+      margin-top: 18px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      min-height: 1.5em;
+    }
+
+    @keyframes float{
+      0%, 100%{ transform: translateY(0); }
+      50%{ transform: translateY(-8px); }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+    <section class="card" aria-label="Valentine Proposal Card">
+      <div class="heart" aria-hidden="true">❤</div>
+
+      <h1>Hi JJ, will you be my valentines?</h1>
+      <p class="sub">I promise snacks, good vibes, and lots of love 💕</p>
+
+      <div class="buttons" id="btnArea">
+        <button class="btn yes" id="yesBtn" type="button">Yes 💖</button>
+        <button class="btn no" id="noBtn" type="button">No 🙃</button>
+      </div>
+
+      <p class="message" id="message" aria-live="polite"></p>
+    </section>
+  </main>
+
+  <script>
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+    const btnArea = document.getElementById("btnArea");
+    const message = document.getElementById("message");
+
+    function moveNoButton() {
+      const areaRect = btnArea.getBoundingClientRect();
+      const btnRect = noBtn.getBoundingClientRect();
+
+      // Padding so it doesn't touch edges
+      const padding = 10;
+
+      const maxX = areaRect.width - btnRect.width - padding;
+      const maxY = areaRect.height - btnRect.height - padding;
+
+      // Random new position inside the button area
+      const x = Math.random() * maxX + padding;
+      const y = Math.random() * maxY + padding;
+
+      noBtn.style.left = `${x}px`;
+      noBtn.style.top = `${y}px`;
+      noBtn.style.right = "auto";
+      noBtn.style.transform = "translate(0, 0)";
+    }
+
+    // Run away when hovered (desktop)
+    noBtn.addEventListener("mouseenter", moveNoButton);
+
+    // Also run away on touch / mobile attempts
+    noBtn.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      moveNoButton();
+    }, { passive: false });
+
+    yesBtn.addEventListener("click", () => {
+      message.textContent = "YAY!! 💖 Best decision ever 😭✨";
+      burstHearts();
+    });
+
+    function burstHearts() {
+      const hearts = ["💖","💘","💕","❤","💗"];
+      for (let i = 0; i < 24; i++) {
+        const span = document.createElement("span");
+        span.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+        span.style.position = "fixed";
+        span.style.left = Math.random() * 100 + "vw";
+        span.style.top = "-10px";
+        span.style.fontSize = (14 + Math.random() * 22) + "px";
+        span.style.zIndex = "9999";
+        span.style.transition = "transform 1.8s ease, opacity 1.8s ease";
+        document.body.appendChild(span);
+
+        requestAnimationFrame(() => {
+          span.style.transform =
+            `translateY(${110 + Math.random() * 60}vh) rotate(${Math.random()*360}deg)`;
+          span.style.opacity = "0";
+        });
+
+        setTimeout(() => span.remove(), 1900);
+      }
+    }
+
+    // Optional: Make No button move once at start so it isn't predictable
+    moveNoButton();
+  </script>
+</body>
+</html>
